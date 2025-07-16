@@ -78,8 +78,8 @@ pub struct Pkcs12 {
     pub pkey: zeroize::Zeroizing<Vec<u8>>,
     /// The extra attributes for the certificate
     pub attributes: Vec<BagAttribute>,
-    /// The id for the certificate
-    pub id: u64,
+    /// The serial for the certificate
+    pub serial: Vec<u8>,
 }
 
 use hmac::{Hmac, Mac};
@@ -432,11 +432,14 @@ impl Pkcs12 {
         assert_eq!(ID_SHA_256, mac_data.mac.algorithm.oid);
         assert_eq!(2048, mac_data.iterations);
 
+        let cert = cert.unwrap();
+        let x509 = x509_cert::Certificate::from_der(&cert).unwrap();
+        let serial = x509.tbs_certificate.serial_number.as_bytes().to_vec();
         Self {
-            cert: cert.unwrap(),
+            cert,
             pkey: zeroize::Zeroizing::new(pkey.unwrap()),
             attributes,
-            id,
+            serial,
         }
     }
 }
