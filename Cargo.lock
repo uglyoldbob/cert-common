@@ -430,7 +430,7 @@ dependencies = [
 
 [[package]]
 name = "cert-common"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "cms",
  "const-oid",
@@ -2542,9 +2542,9 @@ checksum = "daf8dba3b7eb870caf1ddeed7bc9d2a049f3cfdfae7cb521b087cc33ae4c49da"
 
 [[package]]
 name = "userprompt"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d8950107057913671760b24a6079b6744ce13ba85073e23acb54b61d33b6eea6"
+checksum = "78c8a17dbedd7df795b5f5411536e12e4657d4263ea01b1a6eb93864a5fbfc7a"
 dependencies = [
  "egui",
  "rfd",
@@ -2555,9 +2555,9 @@ dependencies = [
 
 [[package]]
 name = "userprompt_derive"
-version = "0.0.2"
+version = "0.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49c10586410021467a311e94528acfaa02b28cf9e5d70fe047c8459459244217"
+checksum = "1f018ca8e119f3aace3d217a5ee826c47d4d1a8d8a62572205c742583321f2bc"
 dependencies = [
  "proc-macro2",
  "quote",

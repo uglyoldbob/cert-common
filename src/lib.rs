@@ -4,8 +4,8 @@
 
 //! Commmon code for both wasm and non-wasm code
 
-pub mod pkcs12;
 pub mod oid;
+pub mod pkcs12;
 use oid::*;
 use zeroize::Zeroizing;
 
@@ -160,7 +160,8 @@ impl CsrAttribute {
                         r.next().read_bytes()
                     })
                 })
-            }).ok()?;
+            })
+            .ok()?;
             let oids: Vec<yasna::models::ObjectIdentifier> =
                 yasna::parse_der(&params, |r| r.collect_sequence_of(|r| r.read_oid())).ok()?;
             let oids = oids
@@ -187,8 +188,10 @@ impl CsrAttribute {
 )]
 #[cfg_attr(not(target_arch = "wasm32"), derive(userprompt::EguiPrompting))]
 pub enum HttpsSigningMethod {
+    #[PromptComment = "Generate certificates using rsa and sha256"]
     /// An rsa certificate rsa with sha256
     RsaSha256,
+    #[PromptComment = "Generate certificates with ecdsa and sha256"]
     /// Ecdsa
     #[default]
     EcdsaSha256,
@@ -207,26 +210,23 @@ pub enum HttpsSigningMethod {
 )]
 #[cfg_attr(not(target_arch = "wasm32"), derive(userprompt::EguiPrompting))]
 pub enum SshSigningMethod {
+    #[PromptComment = "Generate certificates with rsa"]
     /// rsa
     Rsa,
+    #[PromptComment = "Generate certificates with ed25519"]
     /// ed25519
     #[default]
     Ed25519,
 }
 
 /// The method that a certificate uses to sign stuff
-#[derive(
-    Debug,
-    Copy,
-    Clone,
-    userprompt::Prompting,
-    serde::Deserialize,
-    serde::Serialize,
-)]
+#[derive(Debug, Copy, Clone, userprompt::Prompting, serde::Deserialize, serde::Serialize)]
 #[cfg_attr(not(target_arch = "wasm32"), derive(userprompt::EguiPrompting))]
 pub enum CertificateSigningMethod {
+    #[PromptComment = "Generate https (x509) certificates"]
     /// An Https certificate
     Https(HttpsSigningMethod),
+    #[PromptComment = "Generate ssh certificates"]
     /// an ssh certificate
     Ssh(SshSigningMethod),
 }
@@ -318,7 +318,7 @@ impl SshSigningMethod {
 /// let cb = cert_common::WasmClosure!({
 /// log::debug!("Entered closure for file selection");
 /// });
-/// 
+///
 /// let cref = cb.as_ref().borrow();
 /// let c2 = cref.as_ref().unwrap();
 /// let func : &js_sys::Function = c2.as_ref().unchecked_ref();
@@ -343,13 +343,13 @@ macro_rules! WasmClosure {
 }
 
 /// A helper function for generating an async closure that is run once
-/// 
+///
 /// Usage
 /// ```
 /// let cb = cert_common::WasmClosureAsync!({
 /// log::debug!("Entered closure for file selection");
 /// });
-/// 
+///
 /// let cref = cb.as_ref().borrow();
 /// let c2 = cref.as_ref().unwrap();
 /// let func : &js_sys::Function = c2.as_ref().unchecked_ref();
@@ -363,13 +363,11 @@ macro_rules! WasmClosureAsync {
         type C = Closure<dyn FnMut()>;
         let handler: Rc<RefCell<Option<C>>> = Rc::new(RefCell::new(None));
         let copy = handler.clone();
-        let closure : wasm_bindgen::closure::Closure<dyn FnMut()> =
-        wasm_bindgen::closure::Closure::once(move || {
-            wasm_bindgen_futures::spawn_local(async move {
-                $code
+        let closure: wasm_bindgen::closure::Closure<dyn FnMut()> =
+            wasm_bindgen::closure::Closure::once(move || {
+                wasm_bindgen_futures::spawn_local(async move { $code });
+                drop(copy);
             });
-            drop(copy);
-        });
         handler.borrow_mut().replace(closure);
         handler
     }};
