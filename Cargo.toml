@@ -1,6 +1,6 @@
 [package]
 name = "cert-common"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 
 [dependencies]
@@ -44,9 +44,13 @@ features = [ "rsa", "ed25519" ]
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 egui = "0.27.2"
-rfd = "0.16.0"
+rfd = { version = "0.16.0", optional = true }
 userprompt = { version = "0.3.1", features = ["serde", "egui"] }
 service = { git = "https://github.com/uglyoldbob/service.git", features = ["async"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 userprompt = { version = "0.3.1", features = ["serde"] }
+
+[features]
+default = []
+files = [ "dep:rfd" ]
