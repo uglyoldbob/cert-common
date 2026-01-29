@@ -186,7 +186,7 @@ impl CsrAttribute {
     serde::Deserialize,
     serde::Serialize,
 )]
-#[cfg_attr(not(target_arch = "wasm32"), derive(userprompt::EguiPrompting))]
+#[cfg_attr(feature = "egui", derive(userprompt::EguiPrompting))]
 pub enum HttpsSigningMethod {
     #[PromptComment = "Generate certificates using rsa and sha256"]
     /// An rsa certificate rsa with sha256
@@ -208,7 +208,7 @@ pub enum HttpsSigningMethod {
     serde::Deserialize,
     serde::Serialize,
 )]
-#[cfg_attr(not(target_arch = "wasm32"), derive(userprompt::EguiPrompting))]
+#[cfg_attr(feature = "egui", derive(userprompt::EguiPrompting))]
 pub enum SshSigningMethod {
     #[PromptComment = "Generate certificates with rsa"]
     /// rsa
@@ -221,7 +221,7 @@ pub enum SshSigningMethod {
 
 /// The method that a certificate uses to sign stuff
 #[derive(Debug, Copy, Clone, userprompt::Prompting, serde::Deserialize, serde::Serialize)]
-#[cfg_attr(not(target_arch = "wasm32"), derive(userprompt::EguiPrompting))]
+#[cfg_attr(feature = "egui", derive(userprompt::EguiPrompting))]
 pub enum CertificateSigningMethod {
     #[PromptComment = "Generate https (x509) certificates"]
     /// An Https certificate

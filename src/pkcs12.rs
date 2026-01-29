@@ -67,7 +67,7 @@ pub struct ProtectedPkcs12 {
     /// The der contents of the document
     pub contents: Vec<u8>,
     /// The id number of the document
-    pub id: u64,
+    pub id: i64,
 }
 
 /// A struct for pkcs12 certificates containing a certificate and a private key
@@ -334,7 +334,7 @@ impl Pkcs12 {
     /// # Arguments
     /// * data - The contents of the pkcs12 document
     /// * pass - The password protecting the document
-    pub fn load_from_data(data: &[u8], pass: &[u8], id: u64) -> Self {
+    pub fn load_from_data(data: &[u8], pass: &[u8], id: i64) -> Self {
         use der::Encode;
 
         let mut cert = None;
