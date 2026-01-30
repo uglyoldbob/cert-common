@@ -4,6 +4,7 @@
 
 //! Commmon code for both wasm and non-wasm code
 
+pub mod api;
 pub mod oid;
 pub mod pkcs12;
 use oid::*;
