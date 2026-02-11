@@ -200,6 +200,9 @@ lazy_static::lazy_static! {
     /// The oid for sha1
     pub static ref OID_HASH_SHA1: Oid =
         as_oid(&[1, 3, 14, 3, 2, 26]);
+    /// The oid for common name
+    pub static ref OID_CERT_COMMON_NAME: Oid =
+        as_oid(&[2, 5, 4, 3]);
     /// The oid for subject key identifier
     pub static ref OID_CERT_SUBJECT_KEY_IDENTIFIER: Oid =
         as_oid(&[2, 5, 29, 14]);
